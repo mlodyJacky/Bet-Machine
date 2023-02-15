@@ -1,0 +1,146 @@
+import requests
+from bs4 import BeautifulSoup
+
+class zespol:
+    def __init__(self):
+        self.pozycjawtabeliusiebie=0
+        self.pozycjawtabelinawyjezdzie=0
+
+        self.liczbameczowusiebie=0
+        self.liczbaremisowusiebie=0
+        self.liczbawygranychusiebie=0
+        self.liczbaprzegranychusiebie=0
+        self.liczbazdobytychbramekusiebie=0
+        self.liczbastraconychbramekusiebie=0
+        self.punktyusiebie=0
+
+        self.liczbameczownawyjezdzie=0
+        self.liczbaremisownawyjezdzie=0
+        self.liczbawygranychnawyjezdzie=0
+        self.liczbaprzegranychnawyjezdzie=0
+        self.liczbazdobytychbrameknawyjezdzie=0
+        self.liczbastraconychbrameknawyjezdzie=0
+        self.punktynawyjezdzie=0
+
+#BAZA DANYCH DRUZYN
+druzyny = "https://www.skysports.com/football/teams"
+response1 = requests.get(druzyny)
+soup1 = BeautifulSoup(response1.content, "html.parser")
+teams = [team.text for team in soup1.find_all("option", class_="page-nav__select-option")]
+'''
+#Sprawdzanie czy zespoly sa w bazie danych
+znalezione1=False
+znalezione2=False
+
+while znalezione1==False and znalezione2==False:
+    pierwszy =input("Nazwa 1 zespolu: ")
+    drugi =input("Nazwa 2 zespolu: ")
+    i=0
+    while(i<len(teams)):
+        if teams[i]==pierwszy:
+            znalezione1=True
+        if teams[i]==drugi:
+            znalezione2=True
+        i+=1
+    if znalezione1==False and znalezione2==False:
+        print("Nie znaleziono druzyny")
+print("Obie druzyny znajduja sie w bazie danych")
+'''
+pierwszy="Arsenal"
+drugi="Manchester City"
+
+#PREMIER LEAGUE TABELE I INFORMACJE STRONA 1
+url = 'https://www.tabelepilkarskie.com/anglia/premier_league/'
+page = requests.get(url)
+soup = BeautifulSoup(page.content, 'html.parser')
+
+#INICJALIZACJA ZESPOLOW
+zespol1=zespol()
+zespol2=zespol()
+
+#WYSZUKIWANIE KTORE MIEJSCE W TABELI U SIEBIE MAJA ZESPOLY
+#TABELA U SIEBIE
+
+tabela1 = soup.find_all("table",class_="html_table")[2]
+i=1
+while i<=20:
+    szukanie1 = tabela1.find_all("tr")[i]
+    szukanie2 = szukanie1.find_all("td")[1]
+    if szukanie2.string == pierwszy:
+        szukanie2 = szukanie1.find_all("td")[0]
+        zespol1.pozycjawtabeliusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[2]
+        zespol1.liczbameczowusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[3]
+        zespol1.liczbawygranychusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[4]
+        zespol1.liczbaremisowusiebie=szukanie2.string
+        
+        szukanie2 = szukanie1.find_all("td")[5]
+        zespol1.liczbaprzegranychusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[6]
+        zespol1.liczbazdobytychbramekusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[7]
+        zespol1.liczbastraconychbramekusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[8]
+        zespol1.punktyusiebie=szukanie2.string
+    if szukanie2.string == drugi:
+        szukanie2 = szukanie1.find_all("td")[0]
+        zespol2.pozycjawtabeliusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[2]
+        zespol2.liczbameczowusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[3]
+        zespol2.liczbawygranychusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[4]
+        zespol2.liczbaremisowusiebie=szukanie2.string
+        
+        szukanie2 = szukanie1.find_all("td")[5]
+        zespol2.liczbaprzegranychusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[6]
+        zespol2.liczbazdobytychbramekusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[7]
+        zespol2.liczbastraconychbramekusiebie=szukanie2.string
+
+        szukanie2 = szukanie1.find_all("td")[8]
+        zespol2.punktyusiebie=szukanie2.string
+    i+=1
+
+print("Pozycja w tabeli u siebie")
+print(pierwszy, " ", zespol1.pozycjawtabeliusiebie)
+print(drugi, " ", zespol2.pozycjawtabeliusiebie)
+
+#TABELA NA WYJEZDZIE
+tabela1 = soup.find_all("table",class_="html_table")[3]
+i=1
+while i<=20:
+    szukanie1 = tabela1.find_all("tr")[i]
+    szukanie2 = szukanie1.find_all("td")[1]
+    if szukanie2.string == pierwszy:
+        szukanie2 = szukanie1.find_all("td")[0]
+        zespol1.pozycjawtabelinawyjezdzie=szukanie2.string
+    if szukanie2.string == drugi:
+        szukanie2 = szukanie1.find_all("td")[0]
+        zespol2.pozycjawtabelinawyjezdzie=szukanie2.string
+    i+=1
+
+print("Pozycja w tabeli na wyjezdzie")
+print(pierwszy, " ", zespol1.pozycjawtabelinawyjezdzie)
+print(drugi, " ", zespol2.pozycjawtabelinawyjezdzie)
+
+
+
+
+
+
+
